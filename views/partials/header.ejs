@@ -1,8 +1,17 @@
 <html>
     <head>
-        <Title>Paw - HOME</Title>
+        
+        <% if(filename == "index"){ %>
+            <Title>Paw - HOME</Title>
+            <link rel="stylesheet" type="text/css" href="/css/index.css">
+        <% }else if(filename == "contactus"){ %>
+            <Title>Paw - Contact Us</Title>
+            <link rel="stylesheet" type="text/css" href="/css/contactus.css">
+        <% }else if(filename == "donate"){ %>
+            <Title>Paw - Donate</Title>
+            <link rel="stylesheet" type="text/css" href="/css/donate.css">
+        <%}%>
         <link rel="stylesheet" type="text/css" href="/css/common.css">
-        <link rel="stylesheet" type="text/css" href="/css/index.css">
     </head>
     <body>
         <nav>

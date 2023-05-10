@@ -8,13 +8,13 @@ app.use(express.static(__dirname + '/public'))
 app.set("view engine", 'ejs')
 
 app.get("/", (req, res)=>{
-    res.render("index")
+    res.render("index", {filename:"index"})
 })
 app.get("/contactus", (req, res)=>{
-    res.render("contactus")
+    res.render("contactus", {filename:"contactus"})
 })
 app.get("/donate", (req, res)=>{
-    res.render("donate")
+    res.render("donate", {filename:"donate"})
 })
 app.listen(PORT, (err)=>{
     if(err)
