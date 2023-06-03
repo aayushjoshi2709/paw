@@ -1,0 +1,43 @@
+<%- include("partials/admin/navigation.ejs") %>
+<section class="dashboard-display">
+    <h1 class="heading"><center><%-filename%></center></h1>
+    <%if(filename=="dogs"){%>
+    <div>
+        <a href="/admin/dashboard/dogs/new">
+            <button>Add New Record</button>
+        </a>
+    </div>
+    <%}%>
+    <!-- <div class="table-container"> -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Sno</th>
+                    <th>Name</th>
+                    <th>Image</th>
+                    <th class="desc">Descriptions</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(data != null) {%>
+                    <% for(dog in data){ %>
+                        <tr>
+                            <td>1</td>
+                            <td><%- data[dog].name %></td>
+                            <td><img src="<%- '/'+data[dog].image.slice(7) %>"></td>
+                            <td class="desc"><%- data[dog].description %></td>
+                            <td>
+                                <select>
+                                    <option>View</option>
+                                    <option>Edit</option>
+                                    <option>Delete</option>
+                                </select>
+                            </td>
+                        </tr>
+                    <%}%>
+                <%}%>
+            </tbody>
+        </table>
+    </div>
+</section>

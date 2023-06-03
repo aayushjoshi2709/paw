@@ -8,15 +8,19 @@
     <title>Admin Dashboard - PAW</title>
     <% if(filename=="index"){ %>
         <link rel="stylesheet" href="/css/admin/dashboard_index.css">
+    <% }else if(filename=="changepass" || filename=="adddog"){ %>
+        <link rel="stylesheet" href="/css/admin/dashboard_changepass.css">
+    <% }else if(filename=="dogs" || filename=="donations"){ %>
+        <link rel="stylesheet" href="/css/admin/dashboard_master.css">
     <% } %>
 </head>
 <body>
     <nav>
         <h1><center>PAW</center></h1>
         <ul>
-            <li>Dogs</li>
-            <li>Donations</li>
-            <li>Contact Us</li>
-            <li>User Info</li>
+            <li><a href="/admin/dashboard/dogs">Dogs</a></li>
+            <li><a href="/admin/dashboard/donations">Donations</a></li>
+            <li><a href="/admin/dashboard/contactus">Contact Us</a></li>
+            <li><a href="/admin/dashboard/changepass">Change Password</a></li>
         </ul>
     </nav>

@@ -1,0 +1,13 @@
+<%- include("partials/admin/navigation.ejs") %>
+<section class="dashboard-display">
+    <form method="post" action="/admin/dashboard/dogs" enctype='multipart/form-data'>
+        <h1><center>Add Dog</center></h1>
+        <label for="name">Name:</label>
+        <input id="name" name="name" type="text">
+        <label for="desc">Description:</label>
+        <textarea id="desc" name="desc" rows="5" type="text"></textarea>
+        <label for="image">Dog Image:</label>
+        <input id="image" name="dogavtar" type="file">
+        <input type="submit" value="Add Dog">
+    </form>
+</section> 

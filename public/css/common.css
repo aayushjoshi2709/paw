@@ -115,10 +115,18 @@ footer p{
      height: 100%;
 }
 
-.card-text {
+.card-header, .card-desc{
+    display: flex;
+    justify-content: center;
     padding: 8px;
 }
-
+.card-header {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.card-desc{
+    font-style: italic;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
 .form-container{
     display: flex;
     flex-direction: column;

@@ -1,0 +1,24 @@
+.dashboard-display{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    min-width: 280px;
+    width: 30%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    padding: 16px;
+}
+form h1{
+    text-transform: capitalize;
+}
+form input{
+    padding:8px;
+    margin-bottom: 8px;
+}
+textarea{
+    resize: none;
+}

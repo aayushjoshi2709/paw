@@ -30,7 +30,18 @@ nav ul li{
     font-weight: 600;
     text-transform: uppercase;
     margin:0;
-    border: 0.1px solid grey;
+    border-bottom: 0.1px solid grey;
+}
+nav ul li:nth-child(1){
+    border-top: 0.1px solid grey;
+}
+nav ul li a{
+    text-decoration: none;
+    color:black;
+}
+nav ul li a:visited{
+    text-decoration: none;
+    color:black;
 }
 .dashboard-display{
     flex:3;
