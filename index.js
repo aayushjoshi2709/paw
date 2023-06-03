@@ -16,6 +16,12 @@ app.get("/contactus", (req, res)=>{
 app.get("/donate", (req, res)=>{
     res.render("donate", {filename:"donate"})
 })
+app.get("/admin", (req, res)=>{
+    res.render("admin", {filename: "admin"})
+})
+app.get("/admin/dashboard", (req,res)=>{
+    res.render("admin_dashboard")
+})
 app.listen(PORT, (err)=>{
     if(err)
         console.log("error starting server")

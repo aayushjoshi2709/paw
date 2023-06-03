@@ -1,0 +1,25 @@
+<html>
+    <head>        
+        <link rel="stylesheet" type="text/css" href="/css/common.css">
+        <% if(filename == "index"){ %>
+            <Title>Paw - HOME</Title>
+            <link rel="stylesheet" type="text/css" href="/css/index.css">
+        <% }else if(filename == "contactus"){ %>
+            <Title>Paw - Contact Us</Title>
+            <link rel="stylesheet" type="text/css" href="/css/contactus.css">
+        <% }else if(filename == "donate"){ %>
+            <Title>Paw - Donate</Title>
+            <link rel="stylesheet" type="text/css" href="/css/donate.css">
+        <% }else if(filename == "admin"){%>
+            <Title>Paw - Admin Page</Title>
+            <link rel="stylesheet" type="text/css" href="/css/admin.css">
+        <%}%>
+    </head>
+    <body>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/contactus">Contact Us</a></li>
+                <li><a href="/donate">Donate</a></li>
+            </ul>
+        </nav>

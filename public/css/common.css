@@ -1,7 +1,10 @@
 html, body{
     margin: 0;
     padding: 0;
-   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 nav{
     background-color: rgba(1,1,1,0.4);
@@ -39,7 +42,7 @@ nav li a:visited{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    min-height: 600px;
+    flex:1;
     justify-content: space-between;
 }
 .banner-div p {
@@ -61,6 +64,7 @@ footer{
     background-color: rgba(1,1,1,0.4);
     padding:16;
     margin-bottom: 0;
+    justify-self: flex-end;
 }
 
 footer p{
