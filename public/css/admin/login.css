@@ -1,7 +1,7 @@
 .banner-div{
     justify-content: center;
     align-items: center;
-    background-image: url("../images/donate_image.jpg");
+    background-image: url("../../images/donate_image.jpg");
 }
 input{
     margin: 0;

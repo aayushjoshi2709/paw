@@ -16,11 +16,14 @@ app.get("/contactus", (req, res)=>{
 app.get("/donate", (req, res)=>{
     res.render("donate", {filename:"donate"})
 })
-app.get("/admin", (req, res)=>{
-    res.render("admin", {filename: "admin"})
+app.get("/login", (req, res)=>{
+    res.render("login", {filename: "login"})
 })
 app.get("/admin/dashboard", (req,res)=>{
-    res.render("admin_dashboard")
+    res.render("admin_dashboard_index", {filename:"index"})
+})
+app.get("*", (req, res)=>{
+    res.redirect("/")
 })
 app.listen(PORT, (err)=>{
     if(err)
