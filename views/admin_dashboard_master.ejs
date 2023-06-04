@@ -15,15 +15,23 @@
                     <th>Sno</th>
                     <th>Name</th>
                     <th>Image</th>
-                    <th class="desc">Descriptions</th>
-                    <th>Actions</th>
+                    <% if(filename =="dogs") {%>
+                        <th class="desc">Descriptions</th>
+                        <th>Actions</th>
+                    <%}%>
+                    <% if(filename =="donations") {%>
+                        <th class="desc">Views</th>
+                        <th>Status</th>
+                        <th>Ammount</th>
+                    <%}%>
                 </tr>
             </thead>
             <tbody>
-                <% if(data != null) {%>
+                <% if(data != null && filename =="dogs") {%>
+                    <% id=1 %>
                     <% for(dog in data){ %>
                         <tr>
-                            <td>1</td>
+                            <td><%- id %></td>
                             <td><%- data[dog].name %></td>
                             <td><img src="<%- '/'+data[dog].image.slice(7) %>"></td>
                             <td class="desc"><%- data[dog].description %></td>
@@ -35,6 +43,21 @@
                                 </select>
                             </td>
                         </tr>
+                        <% id=id+1 %>
+                    <%}%>
+                <%}%>
+                <% if(data != null && filename =="donations") {%>
+                    <% id=1 %>
+                    <% for(donation in data){ %>
+                        <tr>
+                            <td><%- id %></td>
+                            <td><%- data[donation].fname + " " + data[donation].lname %></td>
+                            <td><img src="<%- '/'+data[donation].image.slice(7) %>"></td>
+                            <td class="desc"><%- data[donation].description %></td>
+                            <td><%- data[donation].status %></td>
+                            <td><%- data[donation].ammount %></td>
+                        </tr>
+                        <% id=id+1 %>
                     <%}%>
                 <%}%>
             </tbody>

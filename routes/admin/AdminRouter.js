@@ -36,7 +36,12 @@ router.post("/dashboard/dogs", upload.single("dogavtar") , (req,res,next)=>{
     })
 })
 router.get("/dashboard/donations", (req,res)=>{
-    res.render("admin_dashboard_master", {filename:"donations", data:null})
+    DonationsModal.find({}).then((response)=>{
+        res.render("admin_dashboard_master", {filename:"donations", data:response})
+    }).catch((err)=>{
+        console.log(err)
+        res.render("donate", {filename:"donate", data:null})
+    })
 })
 router.get("/dashboard/contactus", (req,res)=>{
     res.render("admin_dashboard_master", {filename:"contactus", data:null})

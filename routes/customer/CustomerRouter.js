@@ -24,14 +24,17 @@ router.get("/contactus", (req, res)=>{
     res.render("contactus", {filename:"contactus"})
 })
 router.get("/donate", (req, res)=>{
-    res.render("donate", {filename:"donate"})
+    DonationsModal.find({status:"SUCCESS"}).then((response)=>{
+        res.render("donate", {filename:"donate", data:response})
+    }).catch((err)=>{
+        console.log(err)
+        res.render("donate", {filename:"donate", data:null})
+    })
 })
 router.post("/donate/makepayment",upload.single("donateavatar"), (req, res, next)=>{
     let val = ""+Math.floor(Math.random() * 1000)+Math.floor(Math.random() * 1000)
     const orderId = "PAW_"+val
     const custId = "CUST"+val
-    console.log(req.body)
-    console.log(req.file.path)
     const Donations = new DonationsModal({
         fname:req.body.fname,
         lname:req.body.lname,
@@ -39,10 +42,10 @@ router.post("/donate/makepayment",upload.single("donateavatar"), (req, res, next
         image:req.file.path,
         custId:custId,
         description:req.body.why,
-        ammount: parseFloat(req.body.ammount),
+        ammount: req.body.ammount,
         phone:req.body.phone,
         orderId:orderId,
-        status:"Waiting"
+        status:"WAITING"
     })
     Donations.save().then((donation)=>{
         var options = {
@@ -57,7 +60,7 @@ router.post("/donate/makepayment",upload.single("donateavatar"), (req, res, next
                 res.status(200).send({
                     "orderId": donate.orderId,
                     "callBackUrl":RAZORPAY_CALLBACK_URL,
-                    "ammount":donation.ammount.toString(),
+                    "ammount":donation.ammount.toString() +"00",
                     "key":process.env.RAZORPAY_KEY,
                     "name":donation.fname + " " + donation.lname,
                     "email":donation.email,
@@ -70,8 +73,6 @@ router.post("/donate/makepayment",upload.single("donateavatar"), (req, res, next
 })
 router.post("/donate/makepayment/success", (req, res)=>{
     generated_signature = crypto.createHmac('sha256', RAZORPAY_SECRET).update(req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id).digest("HEX")
-    console.log(generated_signature)
-    console.log(req.body.razorpay_signature)
     if (generated_signature == req.body.razorpay_signature) {
         DonationsModal.findOne({orderId: req.body.razorpay_order_id}).then((donation)=>{
             donation.signature = req.body.razorpay_signature
