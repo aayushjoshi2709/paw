@@ -18,6 +18,7 @@ app.set("view engine", 'ejs')
 mongoose.connect(DATABASE_URL).then(()=>{
     console.log("Successfully connected to the database")
 }).catch((err)=>{
+    console.log(err)
     console.log("Error connecting to the database")
 })
 
@@ -68,10 +69,10 @@ app.post("/admin/dashboard/dogs", upload.single("dogavtar") , (req,res,next)=>{
     })
 })
 app.get("/admin/dashboard/donations", (req,res)=>{
-    res.render("admin_dashboard_master", {filename:"donations"})
+    res.render("admin_dashboard_master", {filename:"donations", data:null})
 })
 app.get("/admin/dashboard/contactus", (req,res)=>{
-    res.render("admin_dashboard_master", {filename:"contactus"})
+    res.render("admin_dashboard_master", {filename:"contactus", data:null})
 })
 app.get("/admin/dashboard/changepass", (req,res)=>{
     res.render("admin_dashboard_changepass", {filename:"changepass"})
