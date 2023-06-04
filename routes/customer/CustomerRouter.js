@@ -6,6 +6,9 @@ const crypto = require("crypto")
 const upload = multer({dest:'upload/donatorimages/'})
 const DogsModal = require("../../modals/DogsModal")
 const DonationsModal = require("../../modals/DonationsModal")
+const DogAdoptionModal = require("../../modals/DogAdoptionModal")
+const ContactUsModal = require("../../modals/ContactUsModal")
+
 const Razorpay = require("razorpay")
 const RAZORPAY_SECRET = process.env.RAZORPAY_SECRET
 const RAZORPAY_CALLBACK_URL = process.env.HOST + "/donate/makepayment/success"
@@ -22,6 +25,33 @@ router.get("/", (req, res)  =>{
 })
 router.get("/contactus", (req, res)=>{
     res.render("contactus", {filename:"contactus"})
+})
+router.post("/dogadoption", (req, res)=>{
+    const DogAdoption = new DogAdoptionModal({
+        name:req.body.name,
+        email:req.body.email,
+        phoneno:req.body.phone,
+        why:req.body.why,
+        gender:req.body.gender
+    })
+    DogAdoption.save().then((DogAdoptionObj)=>{
+        res.redirect("/contactus")
+    }).catch((err)=>{
+        res.redirect("/contactus")
+    })
+})
+router.post("/contactus", (req, res)=>{
+    const ContactUs = new ContactUsModal({
+        name:req.body.name,
+        email:req.body.email,
+        phoneno:req.body.phone,
+        query:req.body.query
+    })
+    ContactUs.save().then((ContactUsObj)=>{
+        res.redirect("/contactus")
+    }).catch((err)=>{
+        res.redirect("/contactus")
+    })
 })
 router.get("/donate", (req, res)=>{
     DonationsModal.find({status:"SUCCESS"}).then((response)=>{

@@ -1,0 +1,43 @@
+<%- include("../partials/admin/navigation.ejs") %>
+<section class="dashboard-display">
+    <h1 class="heading"><center><%-filename%></center></h1>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>S.no.</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone No.</th>
+                    <th>Query</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(data != null) {%>
+                    <% id=1 %>
+                    <% for(query in data){ %>
+                        <tr>
+                            <td><%- id %></td>
+                            <td><%- data[query].name %></td>
+                            <td><%- data[query].email %></td>
+                            <td><%- data[query].phoneno %></td>
+                            <td><%- data[query].query %></td>
+                            <td><%- data[query].date.toString().split('G')[0] %></td>
+                            <td>
+                                <select>
+                                    <option>View</option>
+                                    <option>Edit</option>
+                                    <option>Delete</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <% id=id+1 %>
+                    <%}%>
+                <%}%>
+            </tbody>
+        </table>
+    </div>
+</section>
+<%- include("../partials/admin/footer.ejs") %>

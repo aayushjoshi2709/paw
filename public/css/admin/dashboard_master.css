@@ -13,40 +13,41 @@ button{
 
 table{
     max-height: 80vh;
-    display:flex;
-    flex: 1;
+    /* display:flex;
+    flex: 1; */
     height: 100%;
-    
+    border-collapse: collapse;
     border-top: 1px solid black;
-    
+    width: 100%;
     overflow-y: auto;
     margin:10px;
-    /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
-    flex-direction: column;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    /* flex-direction: column; */
 }
 
 tr{
-    display: flex;
+    /* display: flex; */
     border-left: 1px solid black;
-    flex: 1;
+    /* flex: 1; */
 }
 th, td{
-    flex: 1;
+    /* flex: 1; */
     border-bottom: 1px solid black;
     border-right: 1px solid black;
-    padding: 8px;
+    padding: 4px;
 }
 
 td{
-    text-align: right;
+    text-align: end;
 }
 td img{
-    width: 100%;
     object-fit: cover;
+    width: 170px;
     aspect-ratio: 1/1;
 }
-.desc{
-    flex:3;
+.image{
+    text-align: center;
+    /* flex:3; */
 }
 select{
     width: 100%;

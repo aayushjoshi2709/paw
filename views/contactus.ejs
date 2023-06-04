@@ -8,29 +8,38 @@
                 <h1 id="dogAdoption" onclick="dogAdoption()" class="active"><center>Dog Adoption Form</center></h1>
                 <h1 id="contactUs" onclick="contactUs()"><center>Contact Us</center></h1>
             </div>
-            <form id="myForm" onsubmit="Form()">
+            <form id="dogAdoptionForm" method="post" action="/dogadoption">
                 <label for="name" >Name:</label>
                 <input type="text" id="name" name="name" required><br><br>
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required><br><br>
                 <label for="phone">Phone Number:</label>
                 <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required><br><br>
-                <span id="dogAdoptionSpan">
-                    <label for="why">Why do you want to adopt a dog:</label>
-                    <input type="text" id="why" name="why" minlength="8"><br><br>
-                    <div id="gender">
-                        <label for="gender">Gender Preffered:</label>
-                        <input type="radio" id="male" name="gender" value="male">
-                        <label for="male">Male</label>
-                        <input type="radio" id="female" name="gender" value="female">
-                        <label for="female">Female</label><br><br>
-                    </div>
-                </span>
-                <span id="contactUsSpan">
-                    <label for="why">Tell us your query:</label>
-                    <textarea rows="4" type="text" id="why" name="why" minlength="8">
-                    </textarea><br><br>
-                </span>
+                <label for="why">Why do you want to adopt a dog:</label>
+                <input type="text" id="why" name="why" minlength="8"><br><br>
+                <div id="gender">
+                    <label for="gender">Gender Preffered:</label>
+                    <input type="radio" id="male" name="gender" value="male">
+                    <label for="male">Male</label>
+                    <input type="radio" id="female" name="gender" value="female">
+                    <label for="female">Female</label><br><br>
+                </div>
+                <div>
+                    <center>
+                        <input type="submit" value="Adopt Me">
+                    </center>
+                </div>
+             </form>
+             <form id="contactUsForm" method="post" action="/contactus">
+                <label for="name" >Name:</label>
+                <input type="text" id="name" name="name" required><br><br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required><br><br>
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required><br><br>
+                <label for="query">Tell us your query:</label>
+                <textarea rows="4" type="text" id="query" name="query" minlength="8">
+                </textarea><br><br>
                 <div>
                     <center>
                         <input type="submit" value="Adopt Me">

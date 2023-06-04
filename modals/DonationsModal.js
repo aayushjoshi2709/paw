@@ -12,4 +12,4 @@ const DonationSchema = new mongoose.Schema({
     paymentId:String,
     signature:String
 })
-module.exports = mongoose.model("Donations",DonationSchema)
+module.exports = new mongoose.model("Donations",DonationSchema)
