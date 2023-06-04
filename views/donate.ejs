@@ -5,7 +5,7 @@
      </p>
     <div class="form-container">
         <h1><center>Donate To Us</center></h1>
-        <form id="myForm" method="post" action="/donate/makepayment" enctype='multipart/form-data'>
+        <form id="myForm" enctype='multipart/form-data'>
             <label for="fname" >First Name:</label>
             <input type="text" id="fname" name="fname" required>
             <label for="lname" >Last Name:</label>
@@ -23,26 +23,65 @@
             </textarea>
             <div>
                 <center>
-                    <input type="submit" value="Donate">
+                    <input id="donate" type="submit" value="Donate">
                 </center>
             </div>
          </form>
     </div>
 </section>
-        <section id="donators-profiles">
-            <h1>Top Donators</h1>
-            <div id="cards">
-                <div class="card">
-                    <div class="card-image">
-                        <img src="https://th.bing.com/th/id/OIP.q2FlKUt2T39oR6TKb-LbbAHaE7?w=241&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7">
-                    </div>
-                    <div class="card-header">
-                        hello
-                    </div>
-                    <div class="card-desc">
-                        hi
-                    </div>
-                </div>
+<section id="donators-profiles">
+    <h1>Top Donators</h1>
+    <div id="cards">
+        <div class="card">
+            <div class="card-image">
+                <img src="https://th.bing.com/th/id/OIP.q2FlKUt2T39oR6TKb-LbbAHaE7?w=241&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7">
             </div>
-        </section>
+            <div class="card-header">
+                hello
+            </div>
+            <div class="card-desc">
+                hi
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.js" integrity="sha512-RjvSEaeDqPCfUVQ9kna2/2OqHz/7F04IOl1/66LmQjB/lOeAzwq7LrbTzDbz5cJzlPNJ5qteNtHR56XaJSTNWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    document.getElementById("myForm").onsubmit = function (event) {
+        event.preventDefault();
+        const myFormData = new FormData(event.target);
+        axios.post('/donate/makepayment', myFormData, {
+            headers: {
+            "Content-Type": "multipart/form-data",
+            }
+        }).then((response) => {
+            const data = response.data;
+            var options = {
+                key: data.key,
+                amount: data.ammount,
+                currency: "INR",
+                name: "PAW",
+                description: "Test Transaction",
+                image: "https://example.com/your_logo",
+                order_id: data.orderId,
+                callback_url: data.callBackUrl,
+                prefill: {
+                    name: data.name,
+                    email: data.email,
+                    contact: data.phone,
+                },
+                theme: {
+                    color: "#3399cc",
+                },
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        }, (error) => {
+            console.log(error);
+        });
+
+        event.preventDefault();
+    };
+</script>
 <%- include("partials/user/footer.ejs") %>

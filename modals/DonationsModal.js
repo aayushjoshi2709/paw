@@ -4,11 +4,12 @@ const DonationSchema = new mongoose.Schema({
     lname:String,
     image:String,
     description:String,
-    ammount: mongoose.Types.Decimal128,
+    ammount: Number,
     phone:Number,
     orderId:String,
     email:String,
     status:String,
-    custId:String
+    paymentId:String,
+    signature:String
 })
 module.exports = mongoose.model("Donations",DonationSchema)

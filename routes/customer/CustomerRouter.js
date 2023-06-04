@@ -2,20 +2,18 @@ const express=  require("express")
 const router = express.Router()
 require('dotenv').config()
 const multer = require("multer")
-const PaytmChecksum = require('./Paytm/checksum')
-const { response } = require('express')
-const https = require('https');
+const crypto = require("crypto")
 const upload = multer({dest:'upload/donatorimages/'})
 const DogsModal = require("../../modals/DogsModal")
 const DonationsModal = require("../../modals/DonationsModal")
-const ENVIRONMENT = process.env.ENVIRONMENT;
-const PAYTM_CALLBACK_URL = process.env.HOST + "/donate/makepayout/processpayment";
-const PAYTM_MERCHANT_ID = process.env.PAYTM_MERCHANT_ID;
-const PAYTM_MERCHANT_KEY = process.env.PAYTM_MERCHANT_KEY;
-const PAYTM_WEBSITE = process.env.PAYTM_WEBSITE;
-const path = require('path')
-const qs = require('querystring')
-router.get("/", (req, res)=>{
+const Razorpay = require("razorpay")
+const RAZORPAY_SECRET = process.env.RAZORPAY_SECRET
+const RAZORPAY_CALLBACK_URL = process.env.HOST + "/donate/makepayment/success"
+const instance =  new Razorpay({
+    key_id:process.env.RAZORPAY_KEY,
+    key_secret:process.env.RAZORPAY_SECRET
+})
+router.get("/", (req, res)  =>{
     DogsModal.find({}).then((dogs)=>{
         res.render("index", {filename:"index",data:dogs})
     }).catch((ex)=>{
@@ -29,8 +27,11 @@ router.get("/donate", (req, res)=>{
     res.render("donate", {filename:"donate"})
 })
 router.post("/donate/makepayment",upload.single("donateavatar"), (req, res, next)=>{
-    const orderId = "PAW"+Math.floor(Math.random() * 1000)+Date.now()
-    const custId = "CUST"+Math.floor(Math.random() * 1000)+Date.now()
+    let val = ""+Math.floor(Math.random() * 1000)+Math.floor(Math.random() * 1000)
+    const orderId = "PAW_"+val
+    const custId = "CUST"+val
+    console.log(req.body)
+    console.log(req.file.path)
     const Donations = new DonationsModal({
         fname:req.body.fname,
         lname:req.body.lname,
@@ -44,81 +45,43 @@ router.post("/donate/makepayment",upload.single("donateavatar"), (req, res, next
         status:"Waiting"
     })
     Donations.save().then((donation)=>{
-        let body = ''
-
-        const orderId = 'TEST_' + new Date().getTime()
-            let data = qs.parse(body)
-            const paytmParams = {}
-            paytmParams.body = {
-                "requestType": "Payment",
-                "mid": PAYTM_MERCHANT_ID,
-                "websiteName": PAYTM_WEBSITE,
-                "orderId": donation.orderId,
-                "callbackUrl": PAYTM_CALLBACK_URL,
-                "txnAmount": {
-                    "value": donation.ammount,
-                    "currency": "INR",
-                },
-                "userInfo": {
-                    "custId": donation.email,
-                },
-            };
-
-            PaytmChecksum.generateSignature(JSON.stringify(paytmParams.body), PAYTM_MERCHANT_KEY).then(function (checksum) {
-                paytmParams.head = {
-                    "signature": checksum
-                };
-                 var post_data = JSON.stringify(paytmParams);
-                var options = {
-                    hostname: (ENVIRONMENT=="STAGING")?'securegw-stage.paytm.in':'securegw.paytm.in',
-                    port: 443,
-                    path: `/theia/api/v1/initiateTransaction?mid=${PAYTM_MERCHANT_ID}&orderId=${donation.orderId}`,
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Content-Length': post_data.length
-                    }
-                };
-                var response = "";
-                var post_req = https.request(options, function (post_res) {
-                    post_res.on('data', function (chunk) {
-                        response += chunk;
-                    });
-                    post_res.on('end', function () {
-                        response = JSON.parse(response)
-                        console.log('txnToken:', response);
-                        res.writeHead(200, { 'Content-Type': 'text/html' })
-                        res.write(`<html>
-                            <head>
-                                <title>Show Payment Page</title>
-                            </head>
-                            <body>
-                                <center>
-                                    <h1>Please do not refresh this page...</h1>
-                                </center>
-                                <form method="post" action="https://securegw-stage.paytm.in/theia/api/v1/showPaymentPage?mid=${PAYTM_MERCHANT_ID}&orderId=${donation.orderId}" name="paytm">
-                                    <table border="1">
-                                        <tbody>
-                                            <input type="hidden" name="mid" value="${PAYTM_MERCHANT_ID}">
-                                                <input type="hidden" name="orderId" value="${donation.orderId}">
-                                                <input type="hidden" name="txnToken" value="${response.body.txnToken}">
-                                        </tbody>
-                                  </table>
-                                  <script type="text/javascript"> document.paytm.submit(); </script>
-                               </form>
-                            </body>
-                         </html>`)
-                        res.end()
-                    });
-                });
-                post_req.write(post_data);
-                post_req.end();
-            });
+        var options = {
+            amount: donation.ammount,  
+            currency: "INR",
+            receipt: "order_rcptid_11"
+        };
+        instance.orders.create(options, function(err, order) {
+        if(!err){
+            donation.orderId = order.id;
+            donation.save().then((donate)=>{
+                res.status(200).send({
+                    "orderId": donate.orderId,
+                    "callBackUrl":RAZORPAY_CALLBACK_URL,
+                    "ammount":donation.ammount.toString(),
+                    "key":process.env.RAZORPAY_KEY,
+                    "name":donation.fname + " " + donation.lname,
+                    "email":donation.email,
+                    "phone":donation.phone.toString()
+                })
+            })
+          }  
+        });
     })
-    
 })
-
-router.post("/donate/makepayout/processpayment", (req, res)=>{
-    console.log(req.body)
+router.post("/donate/makepayment/success", (req, res)=>{
+    generated_signature = crypto.createHmac('sha256', RAZORPAY_SECRET).update(req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id).digest("HEX")
+    console.log(generated_signature)
+    console.log(req.body.razorpay_signature)
+    if (generated_signature == req.body.razorpay_signature) {
+        DonationsModal.findOne({orderId: req.body.razorpay_order_id}).then((donation)=>{
+            donation.signature = req.body.razorpay_signature
+            donation.paymentId = req.body.razorpay_payment_id
+            donation.status = "SUCCESS"
+            donation.save().then((donation)=>{
+                res.redirect("/donate")
+            })
+        })
+    }
 })
+ 
 module.exports = router;
