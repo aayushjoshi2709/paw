@@ -2,7 +2,7 @@ const express=  require("express")
 const router = express.Router()
 require('dotenv').config()
 const multer = require("multer")
-const checksum_lib = require('./Paytm/checksum')
+const PaytmChecksum = require('./Paytm/checksum')
 const { response } = require('express')
 const https = require('https');
 const upload = multer({dest:'upload/donatorimages/'})
@@ -13,12 +13,8 @@ const PAYTM_CALLBACK_URL = process.env.HOST + "/donate/makepayout/processpayment
 const PAYTM_MERCHANT_ID = process.env.PAYTM_MERCHANT_ID;
 const PAYTM_MERCHANT_KEY = process.env.PAYTM_MERCHANT_KEY;
 const PAYTM_WEBSITE = process.env.PAYTM_WEBSITE;
-
 const path = require('path')
 const qs = require('querystring')
-
-
-
 router.get("/", (req, res)=>{
     DogsModal.find({}).then((dogs)=>{
         res.render("index", {filename:"index",data:dogs})
@@ -48,34 +44,76 @@ router.post("/donate/makepayment",upload.single("donateavatar"), (req, res, next
         status:"Waiting"
     })
     Donations.save().then((donation)=>{
-        var params = {};
-        console.log(PAYTM_MERCHANT_ID)
-        params['MID'] = PAYTM_MERCHANT_ID;
-        params['WEBSITE'] = PAYTM_WEBSITE;
-        params['CHANNEL_ID'] = 'WEB';
-        params['INDUSTRY_TYPE_ID'] = 'Retail';
-        params['ORDER_ID'] = donation.orderId;
-        params['CUST_ID'] = donation.custId;
-        params['TXN_AMOUNT'] = donation.ammount.toString();
-        params['CALLBACK_URL'] = PAYTM_CALLBACK_URL;
-        params['EMAIL'] = donation.email;
-        params['MOBILE_NO'] = donation.phone.toString(); 
-        params_copy={
-            ...params
-        }
-        checksum_lib.genchecksum(params, PAYTM_MERCHANT_KEY, function (err, checksum) {
-          var txn_url =(ENVIRONMENT == "STAGING")?"https://securegw-stage.paytm.in/theia/processTransaction":"https://securegw.paytm.in/theia/processTransaction";
-          var form_fields = "";
-          for (var x in params_copy) {
-            console.log(x, params_copy[x])
-            form_fields += `<input type='hidden' name="${x}" value= "${params_copy[x]}" >`;
-          }
-          form_fields += "<input type='hidden' name='CHECKSUMHASH' value='" + checksum + "' >";
-          console.log(form_fields)
-          res.writeHead(200, { 'Content-Type': 'text/html' });
-          res.write('<html><head><title>Merchant Checkout Page</title></head><body><center><h1>Please do not refresh this page...</h1></center><form method="post" action="' + txn_url + '" name="f1">' + form_fields + '</form><script type="text/javascript">document.f1.submit();</script></body></html>');
-          res.end();
-        });
+        let body = ''
+
+        const orderId = 'TEST_' + new Date().getTime()
+            let data = qs.parse(body)
+            const paytmParams = {}
+            paytmParams.body = {
+                "requestType": "Payment",
+                "mid": PAYTM_MERCHANT_ID,
+                "websiteName": PAYTM_WEBSITE,
+                "orderId": donation.orderId,
+                "callbackUrl": PAYTM_CALLBACK_URL,
+                "txnAmount": {
+                    "value": donation.ammount,
+                    "currency": "INR",
+                },
+                "userInfo": {
+                    "custId": donation.email,
+                },
+            };
+
+            PaytmChecksum.generateSignature(JSON.stringify(paytmParams.body), PAYTM_MERCHANT_KEY).then(function (checksum) {
+                paytmParams.head = {
+                    "signature": checksum
+                };
+                 var post_data = JSON.stringify(paytmParams);
+                var options = {
+                    hostname: (ENVIRONMENT=="STAGING")?'securegw-stage.paytm.in':'securegw.paytm.in',
+                    port: 443,
+                    path: `/theia/api/v1/initiateTransaction?mid=${PAYTM_MERCHANT_ID}&orderId=${donation.orderId}`,
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Content-Length': post_data.length
+                    }
+                };
+                var response = "";
+                var post_req = https.request(options, function (post_res) {
+                    post_res.on('data', function (chunk) {
+                        response += chunk;
+                    });
+                    post_res.on('end', function () {
+                        response = JSON.parse(response)
+                        console.log('txnToken:', response);
+                        res.writeHead(200, { 'Content-Type': 'text/html' })
+                        res.write(`<html>
+                            <head>
+                                <title>Show Payment Page</title>
+                            </head>
+                            <body>
+                                <center>
+                                    <h1>Please do not refresh this page...</h1>
+                                </center>
+                                <form method="post" action="https://securegw-stage.paytm.in/theia/api/v1/showPaymentPage?mid=${PAYTM_MERCHANT_ID}&orderId=${donation.orderId}" name="paytm">
+                                    <table border="1">
+                                        <tbody>
+                                            <input type="hidden" name="mid" value="${PAYTM_MERCHANT_ID}">
+                                                <input type="hidden" name="orderId" value="${donation.orderId}">
+                                                <input type="hidden" name="txnToken" value="${response.body.txnToken}">
+                                        </tbody>
+                                  </table>
+                                  <script type="text/javascript"> document.paytm.submit(); </script>
+                               </form>
+                            </body>
+                         </html>`)
+                        res.end()
+                    });
+                });
+                post_req.write(post_data);
+                post_req.end();
+            });
     })
     
 })
