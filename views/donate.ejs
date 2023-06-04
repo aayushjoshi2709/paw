@@ -5,7 +5,7 @@
      </p>
     <div class="form-container">
         <h1><center>Donate To Us</center></h1>
-        <form id="myForm" method="post" action="/makepayment">
+        <form id="myForm" method="post" action="/donate/makepayment" enctype='multipart/form-data'>
             <label for="fname" >First Name:</label>
             <input type="text" id="fname" name="fname" required>
             <label for="lname" >Last Name:</label>
@@ -17,7 +17,7 @@
             <label for="ammount">Donation Ammount(INR):</label>
             <input type="number" id="ammount" name="ammount" required>
             <label for="phone">Phone Number:</label>
-            <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
+            <input type="tel" id="phone" name="phone" required>
             <label for="why">Some text you want to add:</label>
             <textarea rows="4" type="text" id="why" name="why" minlength="8">
             </textarea>

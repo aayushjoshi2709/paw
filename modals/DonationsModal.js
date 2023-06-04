@@ -1,10 +1,14 @@
 const mongoose = require("mongoose")
 const DonationSchema = new mongoose.Schema({
-    name:String,
+    fname:String,
+    lname:String,
     image:String,
     description:String,
     ammount: mongoose.Types.Decimal128,
-    TransactionId:String,
-    status:String
+    phone:Number,
+    orderId:String,
+    email:String,
+    status:String,
+    custId:String
 })
 module.exports = mongoose.model("Donations",DonationSchema)
