@@ -7,3 +7,11 @@
 .dashboard-display h1{
     font-size: 32px;
 }
+
+@media only screen and (max-width:706px) {
+    #click-text{
+        margin-top: 150px;
+        margin-bottom: 150px;
+        width:80%;
+    }
+}
