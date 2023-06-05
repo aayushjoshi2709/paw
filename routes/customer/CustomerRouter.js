@@ -23,6 +23,12 @@ router.get("/", (req, res)  =>{
         console.log(ex)
     })
 })
+router.get("/admin", (req, res)  =>{
+    res.redirect("/admin/login");
+})
+router.get("/login", (req, res)  =>{
+    res.redirect("/admin/login");
+})
 router.get("/contactus", (req, res)=>{
     res.render("contactus", {filename:"contactus"})
 })
