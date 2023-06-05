@@ -2,7 +2,7 @@
     text-transform: uppercase;
     border-bottom: 1px solid;
 }
-div{
+.button-container{
     display: flex;
     margin: 10px;
     justify-content: flex-end;
@@ -11,27 +11,24 @@ button{
     padding: 10px;
 }
 
-table{
+.table-container{
     max-height: 80vh;
-    /* display:flex;
-    flex: 1; */
-    height: 100%;
+    margin:10px;
+    width: calc(100%-20px);
+    overflow-x: auto;
+}
+table{
     border-collapse: collapse;
+    border-spacing: 0;
     border-top: 1px solid black;
     width: 100%;
-    overflow-y: auto;
-    margin:10px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    /* flex-direction: column; */
 }
 
 tr{
-    /* display: flex; */
     border-left: 1px solid black;
-    /* flex: 1; */
 }
 th, td{
-    /* flex: 1; */
     border-bottom: 1px solid black;
     border-right: 1px solid black;
     padding: 4px;
@@ -47,7 +44,6 @@ td img{
 }
 .image{
     text-align: center;
-    /* flex:3; */
 }
 select{
     width: 100%;

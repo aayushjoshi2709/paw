@@ -6,6 +6,28 @@ html, body{
     flex-direction: column;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
 nav{
     background-color: rgba(1,1,1,0.4);
     display: flex;
@@ -144,3 +166,4 @@ footer p{
     background-color: rgba(1, 1, 1, 0.6);
     padding: 20px;
 }
+

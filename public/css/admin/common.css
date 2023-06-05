@@ -4,13 +4,34 @@ html,body{
     height: 100vh;
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
+}
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }
 nav{
     flex:1;
     padding: 0;
     margin: 0;
-    width:30%;
+    min-width: 300px;
+    flex-wrap: wrap;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
 }
@@ -45,5 +66,6 @@ nav ul li a:visited{
 }
 .dashboard-display{
     flex:3;
-    border:1px solid blue;
+    max-width: 100%;
 }
+
