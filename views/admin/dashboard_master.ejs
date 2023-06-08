@@ -36,8 +36,8 @@
                             <td class="image"><img src="<%- '/'+data[dog].image.slice(7) %>"></td>
                             <td><%- data[dog].description %></td>
                             <td>
-                                <select>
-                                    <option>View</option>
+                                <select onchange="list_action(this, '<%-data[dog]._id %>');">
+                                    <option selected disabled>Select</option>
                                     <option>Edit</option>
                                     <option>Delete</option>
                                 </select>
@@ -63,5 +63,9 @@
             </tbody>
         </table>
     </div>
+
+    <% if(data != null && filename =="dogs") {%>
+        <script type="text/javascript" src="/javascript/dogs.js"></script>
+    <%}%>
 </section>
 <%- include("../partials/admin/footer.ejs") %>

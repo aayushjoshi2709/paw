@@ -3,6 +3,7 @@ const router = express.Router()
 const multer = require("multer")
 const passport = require("passport")
 const upload = multer({dest:'upload/images/'})
+const fs = require("fs")
 const DogsModal = require("../../modals/DogsModal")
 const DonationsModal = require("../../modals/DonationsModal")
 const DogAdoptionModal = require("../../modals/DogAdoptionModal")
@@ -56,9 +57,47 @@ router.get("/dashboard/dogs",isLoggedIn, (req,res)=>{
         console.log(ex)
     })
 })
+router.put("/dashboard/dogs",isLoggedIn, upload.single("dogavtar"), (req,res)=>{
+    const id = req.body.id;
+    DogsModal.findById(id).then((dog)=>{
+        if(req.body.name != undefined)
+        dog.name = req.body.name;
+        if(req.body.desc != undefined)
+        dog.description = req.body.desc;
+        if(req.file != undefined){
+            if(fs.existsSync('./'+dog.image)){
+                fs.unlinkSync('./'+dog.image, (err)=>{
+                    console.log(err)
+                })
+            }
+            dog.image = req.file.path;
+        }
+        dog.save().then((count)=>{
+            res.redirect("/admin/dashboard/dogs")
+        }).catch((ex)=>{console.log(ex)})
+    }).catch((ex)=>{
+        console.log(ex)
+    })
+})
+router.delete("/dashboard/dogs/:id",isLoggedIn, (req,res)=>{
+    const id = req.params.id;
+    DogsModal.findByIdAndRemove(id).then((count)=>{
+        res.status(200).send("dog deleted")
+    }).catch((ex)=>{
+        console.log(ex)
+    })
+})
 router.get("/dashboard/dogs/new",isLoggedIn, (req,res)=>{
     res.render("admin/add_dog", {filename:"adddog"})
 })
+
+router.get("/dashboard/dogs/edit/:id",isLoggedIn, (req,res)=>{
+    const id = req.params.id;
+    DogsModal.findById(id).then((dogData)=>{   
+        res.render("admin/add_dog", {filename:"updatedog", data:dogData, id:id})
+    }).catch((ex)=>{console.log(ex)})
+})
+
 router.post("/dashboard/dogs",isLoggedIn, upload.single("dogavtar") , (req,res,next)=>{
     //code to add new dogs
     const dog = new DogsModal({

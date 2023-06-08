@@ -1,14 +1,23 @@
 <%- include("../partials/admin/navigation.ejs") %>
 <section class="dashboard-display">
-    <form method="post" action="/admin/dashboard/dogs" enctype='multipart/form-data'>
-        <h1><center>Add Dog</center></h1>
+    <form method="post" action="<%- filename !='updatedog'?'/admin/dashboard/dogs':`/admin/dashboard/dogs?_method=PUT"`%>" enctype='multipart/form-data'>
+        <h1><center><%- filename =='updatedog'?'Update Dog':'Add Dog'%></center></h1>
         <label for="name">Name:</label>
-        <input id="name" name="name" type="text">
+        <input id="name" name="name" type="text" value="<%-filename =='updatedog'?data.name:''%>">
         <label for="desc">Description:</label>
-        <textarea id="desc" name="desc" rows="5" type="text"></textarea>
+        <textarea id="desc" name="desc" rows="5" type="text"><%-filename =='updatedog'?data.description:''%></textarea>
+
         <label for="image">Dog Image:</label>
-        <input id="image" name="dogavtar" type="file">
-        <input type="submit" value="Add Dog">
+        <%if(filename=="updatedog"){%>
+            <div style="display: flex; flex-direction: column;justify-content: center;">
+                <img style="width: 100px; height: 100px; align-self: center;" src="<%- filename =='updatedog'?`/${data.image.slice(7)}`:'' %>">
+                <input style="display: flex;" id="image" name="dogavtar" type="file">
+                <input type="hidden" name="id" value="<%-data._id%>">
+            </div>
+        <%}else{%>
+            <input id="image" name="dogavtar" type="file">
+        <%}%>
+        <input type="submit" value="<%- filename =='updatedog'?'Update Dog':'Add Dog'%>">
     </form>
 </section> 
 <%- include("../partials/admin/footer.ejs") %>
