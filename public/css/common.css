@@ -2,8 +2,6 @@ html, body{
     margin: 0;
     padding: 0;
     height: 100vh;
-    display: flex;
-    flex-direction: column;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
@@ -81,7 +79,6 @@ nav li a:visited{
     text-transform: uppercase;
 }
 
-
 footer{
     background-color: rgba(1,1,1,0.4);
     padding:16;
@@ -96,28 +93,31 @@ footer p{
     text-align: center;
     color: white;
 }
-#cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-}
 
-#dog-profiles, #donators-profiles {
+.profile-card {
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
+    width: 100%;
+    justify-content: center;
     align-items: center;
     min-height: 600px;
 }
 
-#dog-profiles h1, #donators-profiles h1 {
-        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-        font-weight: normal;
-        border-bottom: 1px solid grey;
-        width: 350px;
-        font-size: xx-large;
-        text-align: center;
-    }
+.profile-card h1{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: normal;
+    border-bottom: 1px solid grey;
+    font-size: xx-large;
+    text-align: center;
+}
+
+#cards {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+}
 
 .card {
     border: 1px solid grey;
