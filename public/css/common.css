@@ -62,7 +62,6 @@ nav li a:visited{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    flex:1;
     justify-content: space-between;
 }
 .banner-div p {
@@ -99,7 +98,6 @@ footer p{
     flex-wrap: wrap;
     flex-direction: column;
     width: 100%;
-    justify-content: center;
     align-items: center;
     min-height: 600px;
 }
@@ -107,6 +105,7 @@ footer p{
 .profile-card h1{
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-weight: normal;
+    width: 30%;
     border-bottom: 1px solid grey;
     font-size: xx-large;
     text-align: center;
@@ -116,6 +115,7 @@ footer p{
     display: flex;
     flex-wrap: wrap;
     width: 100%;
+    margin-bottom: 30px;
     justify-content: center;
 }
 
